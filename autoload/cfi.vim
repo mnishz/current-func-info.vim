@@ -74,6 +74,9 @@ endif
 function! cfi#format(fmt, default) "{{{
     let name = cfi#get_func_name()
     if name != ''
+        if &l:filetype ==# 'c'
+            let name = name . "()"
+        endif
         return printf(a:fmt, name)
     else
         return a:default
