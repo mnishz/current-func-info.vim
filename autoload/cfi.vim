@@ -162,6 +162,7 @@ function! s:base_finder.find(ctx) "{{{
         endif
 
         " function's begin pos -> {original pos} -> function's end pos
+        " ŠÖ”æ“ª‚Ì'{'‚ÌˆÊ’u‚É‚¢‚é‚ÆApos_is_less_than‚Éˆø‚Á‚©‚©‚Á‚ÄNONE‚ª•Ô‚Á‚Ä‚é‚Á‚Û‚¢
         if !self.in_function(orig_pos)
             return NONE
         endif

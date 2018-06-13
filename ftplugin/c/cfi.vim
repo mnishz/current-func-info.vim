@@ -96,7 +96,8 @@ function! s:finder.find_end() "{{{
     keepjumps normal! ][
     let &vb = vb
 
-    " なんかよく分かんないけど、最初'}'の位置にいたらだめ
+    " ここに来た時点でfind_beginを通っていて、現在地は関数先頭の'{'にいる
+    " そこから変わっていなければだめ
     if line('.') == orig_lnum && col('.') == orig_col
         return NONE
     endif
