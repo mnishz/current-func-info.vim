@@ -79,9 +79,9 @@ function! s:finder.find_begin() "{{{
         return NONE
     endif
     " なんかよく分かんないけど、最初'{'の位置にいたらだめ
-    if line('.') == orig_lnum && col('.') == orig_col
-        return NONE
-    endif
+    " if line('.') == orig_lnum && col('.') == orig_col
+    "     return NONE
+    " endif
     " 関数開始位置を返す
     return [line('.'), col('.')]
 endfunction "}}}

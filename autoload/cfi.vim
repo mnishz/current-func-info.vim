@@ -74,7 +74,7 @@ endif
 function! cfi#format(fmt, default) "{{{
     let name = cfi#get_func_name()
     if name != ''
-        return printf(a:fmt, name)
+        return printf(a:fmt, name . "()")
     else
         return a:default
     endif
@@ -284,13 +284,14 @@ function! s:compare_pos_to_range(pos, range) "{{{
     endif
 endfunction "}}}
 
+" should be renamed
 function! s:pos_is_less_than(pos1, pos2) "{{{
     let [lnum1, col1] = a:pos1
     let [lnum2, col2] = a:pos2
     return
     \   lnum1 <# lnum2
     \   || (lnum1 is lnum2
-    \       && col1 <# col2)
+    \       && col1 <=# col2)
 endfunction "}}}
 
 function! s:error(msg) "{{{
