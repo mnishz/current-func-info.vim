@@ -74,7 +74,7 @@ endif
 function! cfi#format(fmt, default) "{{{
     let name = cfi#get_func_name()
     if name != ''
-        return printf(a:fmt, name . "()")
+        return printf(a:fmt, name)
     else
         return a:default
     endif
