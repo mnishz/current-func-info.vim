@@ -65,7 +65,9 @@ function! s:finder.find_begin() "{{{
             " ここもよく分からないけれど、ここに来れば確定
             " 後ろをすべて連結している、[数字 :]は数字以降すべて
             " 関数の宣言部を除外しているのかな
-            if join(getline('.', '$'), '')[col('.') :] =~# '\s*[^;]'
+            if join(getline('.', '$'), '')[col('.') :] =~# '^\s*;'
+                return NONE
+            else
                 let self.temp.funcname = funcname
                 break
             endif
