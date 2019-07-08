@@ -77,6 +77,9 @@ function! cfi#format(fmt, default) "{{{
         if &l:filetype ==# 'c'
             let name = name . "()"
         endif
+        if &l:filetype ==# 'cpp'
+            let name = name . "()"
+        endif
         return printf(a:fmt, name)
     else
         return a:default
