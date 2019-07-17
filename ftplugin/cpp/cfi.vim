@@ -48,7 +48,7 @@ function! s:finder.find_begin() "{{{
             endif
             " 関数名を取得
             let funcname = matchlist(getline('.'), s:FUNCTION_PATTERN)
-            let funcname = get(funcname, 1, '') .. get(funcname, 2, '')
+            let funcname = get(funcname, 1, '') . get(funcname, 2, '')
             if funcname ==# ''
                 return NONE
             endif
