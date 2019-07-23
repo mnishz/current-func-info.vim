@@ -13,7 +13,10 @@ set cpo&vim
 " }}}
 
 
-let s:FUNCTION_PATTERN = '\C'.'\(\w\+::\)*\(\w\+\)\s*('
+" let s:FUNCTION_PATTERN = '\C'.'\(\w\+::\)*\(\w\+\)\s*('
+" 自社特別仕様
+let s:FUNCTION_LINE_PATTERN = '\v^[^ _#/].*(\w+::)*(\w+)\s*\('
+let s:FUNCTION_PATTERN = '\v(\w+::)*(\w+)\s*\('
 
 let s:finder = cfi#create_finder('cpp')
 
@@ -35,43 +38,14 @@ function! s:finder.find_begin() "{{{
         " Jump to function-like word, and check arguments, and block.
         while 1
             " 関数のような形式になっている箇所を後方に探して移動
-            if search(s:FUNCTION_PATTERN, 'bW') == 0
+            if search(s:FUNCTION_LINE_PATTERN, 'bW') == 0
                 return NONE
             endif
-            " Function name when filetype=c has nothing about syntax info.
-            " (without this condition, if-statement is recognized as function)
-            " 自作関数なのかそうでないのかをsynstackを使って判断しているようだ
-            " 試して見ると確かに自作？関数では空が返ってくる
-            " よく分からん、単に名前だけで判断しているわけではない
-            if !empty(synstack(line('.'), col('.')))
-                continue
-            endif
-            " 関数名を取得
+            " 検索パターンを絶対的に信用して、残りのチェックは全部削除
             let funcname = matchlist(getline('.'), s:FUNCTION_PATTERN)
-            let funcname = get(funcname, 1, '') . get(funcname, 2, '')
-            if funcname ==# ''
-                return NONE
-            endif
-            " ここは何をやっているのか。。。
-            " ああ、searchとsearchpairを呼んでいるだけか
-            " 関数名(引数)の終わりに移動しているっぽい
-            for [fn; args] in [
-            \   ['search', '(', 'W'],
-            \   ['searchpair', '(', '', ')'],
-            \]
-                if call(fn, args) == 0
-                    return NONE
-                endif
-            endfor
-            " ここもよく分からないけれど、ここに来れば確定
-            " 後ろをすべて連結している、[数字 :]は数字以降すべて
-            " 関数の宣言部を除外しているのかな
-            if join(getline('.', '$'), '')[col('.') :] =~# '^\s*;'
-                return NONE
-            else
-                let self.temp.funcname = funcname
-                break
-            endif
+            " 末尾の ( を取り除く
+            let self.temp.funcname = get(funcname, 0, '')[:-2]
+            break
         endwhile
     finally
         let &vb = vb
