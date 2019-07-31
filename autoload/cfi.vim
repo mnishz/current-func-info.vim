@@ -72,6 +72,11 @@ else
 endif
 
 function! cfi#format(fmt, default) "{{{
+    " personal early return
+    if &l:filetype ==# 'cpp' && expand('%:e') !=? 'cpp'
+      return a:default
+    endif
+
     let name = cfi#get_func_name()
     if name != ''
         if &l:filetype ==# 'c'
@@ -168,7 +173,7 @@ function! s:base_finder.find(ctx) "{{{
         endif
 
         " function's begin pos -> {original pos} -> function's end pos
-        " �֐��擪��'{'�̈ʒu�ɂ���ƁApos_is_less_than�Ɉ�����������NONE���Ԃ��Ă���ۂ�
+        " 関数先頭の'{'の位置にいると、pos_is_less_thanに引っかかってNONEが返ってるっぽい
         if !self.in_function(orig_pos)
             return NONE
         endif
